@@ -91,5 +91,11 @@
       mode: 0644
     register: ansible_service_broker_template
 
-  - name: Create Broker resource in Service Catalog
+  - name: Create Broker resource in Service Catalog (ec2)
+    shell: "{{ kubectl_cmd }} --kubeconfig={{ ansible_env.HOME }}/.kube/service-catalog.config create -f /tmp/ansible_service_broker.yaml"
+    when: ec2_install
+
+  - name: Create Broker resource in Service Catalog (not ec2)
     shell: "{{ oc_cmd }} create -f /tmp/ansible_service_broker.yaml"
+    when: not ec2_install
+
